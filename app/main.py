@@ -251,6 +251,33 @@ def get_usage(session_id: str) -> dict:
     return {"session": _session_usage(session), "global": global_usage.snapshot()}
 
 
+# Admin endpoints for the global spend counter — not tied to any session, so
+# they need their own auth. Disabled entirely unless SQLENS_ADMIN_KEY is set;
+# on a host with no shell/disk access (Render's free tier), this is the only
+# way to inspect or reset the counter without a full redeploy.
+ADMIN_KEY = os.environ.get("SQLENS_ADMIN_KEY")
+
+
+def _require_admin(key: str | None) -> None:
+    if not ADMIN_KEY:
+        raise HTTPException(status_code=404, detail="Not found.")
+    if key != ADMIN_KEY:
+        raise HTTPException(status_code=403, detail="Invalid admin key.")
+
+
+@app.get("/api/admin/usage")
+def admin_get_usage(key: str | None = None) -> dict:
+    _require_admin(key)
+    return global_usage.snapshot()
+
+
+@app.post("/api/admin/usage/reset")
+def admin_reset_usage(key: str | None = None) -> dict:
+    _require_admin(key)
+    global_usage.reset()
+    return global_usage.snapshot()
+
+
 class ChatRequest(BaseModel):
     message: str
 

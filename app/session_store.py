@@ -147,6 +147,16 @@ class GlobalUsage:
             self.claude_calls += 1
             self._save()
 
+    def reset(self) -> None:
+        """Zero the counter — e.g. after rotating to a fresh API key/balance.
+        On a host with no shell access (Render's free tier), this is the only
+        way to clear it short of a redeploy wiping the ephemeral disk."""
+        with self._lock:
+            self.input_tokens = 0
+            self.output_tokens = 0
+            self.claude_calls = 0
+            self._save()
+
     def snapshot(self) -> dict:
         with self._lock:
             return {
