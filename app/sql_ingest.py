@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from io import BytesIO
 
 MAX_FILES_PER_UPLOAD = 10
-MAX_TOTAL_UPLOAD_BYTES = 100 * 1024 * 1024  # 100MB — CSV/Excel datasets run bigger than .sql dumps
+MAX_TOTAL_UPLOAD_BYTES = 150 * 1024 * 1024  # 150MB — local-only bump, see note in conversation re: Render RAM risk
 MAX_ROWS_PER_TABULAR_FILE = 200_000  # sanity cap for CSV/Excel imports
 
 SUPPORTED_EXTENSIONS = (".sql", ".csv", ".xlsx", ".xls")

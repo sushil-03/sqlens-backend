@@ -48,7 +48,7 @@ CLAUDE_CALLS_MAX_PER_IP_PER_DAY = _env_int("SQLENS_CLAUDE_CALLS_PER_IP_PER_DAY",
 # The actual "don't exhaust the account" ceiling: a lifetime USD budget across
 # every session and every IP, persisted across restarts. Once hit, the whole
 # demo stops making Claude calls until the operator raises it.
-GLOBAL_BUDGET_USD = _env_float("SQLENS_GLOBAL_BUDGET_USD", 15.0)
+GLOBAL_BUDGET_USD = _env_float("SQLENS_GLOBAL_BUDGET_USD", 5.0)
 
 
 class RateLimiter:
