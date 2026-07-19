@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+anthropic
+pydantic
+eval_type_backport
+python-multipart
+sqlglot
+python-dotenv
+pandas
+openpyxl
+pytest
+httpx
