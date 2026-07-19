@@ -26,9 +26,20 @@ from app.sql_ingest import IngestError, load_files
 
 app = FastAPI(title="SQLens Backend")
 
+# Comma-separated list of allowed frontend origins. Defaults cover local dev
+# plus the deployed Vercel frontend; add any additional domain (custom domain,
+# preview deployments, etc.) via SQLENS_ALLOWED_ORIGINS in the environment
+# rather than editing this list.
+_DEFAULT_ORIGINS = "http://localhost:3000,https://sqlens-frontend.vercel.app"
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("SQLENS_ALLOWED_ORIGINS", _DEFAULT_ORIGINS).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
